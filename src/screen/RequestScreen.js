@@ -87,6 +87,16 @@ class RequestScreen extends Screen {
 		return state;
 	}
 
+
+	/**
+	 * Gives the Screen a chance to format the path before the request is made.
+	 * @path {!string} path Navigation path.
+	 * @return {!string} Navigation path to use for request.
+	 */
+	beforeUpdateRequestPath(path) {
+		return path;
+	}
+
 	/**
 	 * Gets the http headers.
 	 * @return {?Object=}
@@ -153,6 +163,8 @@ class RequestScreen extends Screen {
 		var headers = new MultiMap();
 
 		Object.keys(this.httpHeaders).forEach(header => headers.add(header, this.httpHeaders[header]));
+
+		path = this.beforeUpdateRequestPath(path);
 
 		return Ajax
 			.request(path, httpMethod, body, headers, null, this.timeout)
